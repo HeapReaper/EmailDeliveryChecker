@@ -6,6 +6,13 @@ import time
 import requests
 import os
 from dotenv import load_dotenv
+import logging
+
+logging.basicConfig(
+    filename='email_send.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
 
 load_dotenv()
 
@@ -45,7 +52,9 @@ print(f"Testmail verzonden met code: {code}")
 time.sleep(10)
 
 if not check_mail(os.getenv('TO_ADDRESS'), code):
+    logging.error(f"Failed to send email to {os.getenv('TO_ADDRESS')} from {os.getenv('SMTP_USER')}")
     send_webhook_alert(os.getenv('TO_ADDRESS'), code)
-    print("Webhook verzonden")
+    print("Mail niet binnen gekomen... Webhook verzonden")
 else:
+    logging.info(f"Run successfully to {os.getenv('TO_ADDRESS')} from {os.getenv('SMTP_USER')}")
     print("Mail is aangekomen")
