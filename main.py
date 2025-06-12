@@ -31,7 +31,7 @@ def check_mail(to_address, code):
         mail.select('inbox')
 
         result, data = mail.search(None, 'ALL')
-        for num in data[0].split()[::-1]:  # Recente mails eerst
+        for num in data[0].split()[::-1]:
             result, data = mail.fetch(num, '(RFC822)')
             raw_email = data[0][1]
             msg = email.message_from_bytes(raw_email)
