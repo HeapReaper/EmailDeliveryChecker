@@ -16,7 +16,7 @@ logging.basicConfig(
 
 load_dotenv()
 
-code = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+code = os.getenv("SMTP_USER") + "_to_" + os.getenv("TO_ADDRESS") + datetime.datetime.now().strftime('_%Y-%m-%d_%H:%M:%S')
 
 def send_test_email(to_address, code):
     msg = f"Subject: SMTP Test {code}\n\nDit is een testmail met code: {code}"
