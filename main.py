@@ -7,6 +7,7 @@ import requests
 import os
 from dotenv import load_dotenv
 import logging
+from email.message import EmailMessage
 
 logging.basicConfig(
     filename='email_send.log',
@@ -19,11 +20,16 @@ load_dotenv()
 code = os.getenv("SMTP_USER") + "_to_" + os.getenv("TO_ADDRESS") + datetime.datetime.now().strftime('_%Y-%m-%d_%H:%M:%S')
 
 def send_test_email(to_address, code):
-    msg = f"Subject: SMTP Test {code}\n\nDit is een testmail met code: {code}"
+    msg = EmailMessage()
+    msg['Subject'] = f"SMTP Test {code}"
+    msg['From'] = os.getenv('SMTP_USER')
+    msg['To'] = to_address
+    msg.set_content(f"Dit is een testmail met code: {code}")
+
     with smtplib.SMTP(os.getenv('SMTP_SERVER'), int(os.getenv('SMTP_PORT'))) as server:
         server.starttls()
         server.login(os.getenv('SMTP_USER'), os.getenv('SMTP_PASS'))
-        server.sendmail(os.getenv('SMTP_USER'), os.getenv('TO_ADDRESS'), msg)
+        server.send_message(msg)
 
 def check_mail(to_address, code):
     with imaplib.IMAP4_SSL(os.getenv('IMAP_SERVER')) as mail:
