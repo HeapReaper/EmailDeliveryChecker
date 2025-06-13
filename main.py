@@ -8,6 +8,7 @@ import os
 from dotenv import load_dotenv
 import logging
 from email.message import EmailMessage
+import base64
 
 logging.basicConfig(
     filename='email_send.log',
@@ -55,7 +56,7 @@ def send_webhook_alert(to_address, code):
 send_test_email(os.getenv('TO_ADDRESS'), code)
 print(f"Testmail verzonden met code: {code}")
 
-time.sleep(10)
+time.sleep(20)
 
 if not check_mail(os.getenv('TO_ADDRESS'), code):
     logging.error(f"Failed to send email to {os.getenv('TO_ADDRESS')} from {os.getenv('SMTP_USER')}")
